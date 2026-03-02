@@ -319,7 +319,7 @@ function StatePanel({ stateId, stateName, startupCounts, investorCounts, onClose
                     try {
                       const { markInvestorInterest, getMyInvestorProfile } = await import('../lib/investorDb')
                       const invPro = await getMyInvestorProfile(user.uid, user.email)
-                      await markInvestorInterest(invPro?.id || user.uid, invPro?.firm_name || user.displayName || 'Investor', invPro?.partner_name || user.displayName || 'Investor', s)
+                      await markInvestorInterest(user.uid, invPro?.firm_name || user.displayName || 'Investor', invPro?.partner_name || user.displayName || 'Investor', s)
                     } catch (err) { console.error(err) }
                   }}
                     className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all ${savedSt[s.id] ? 'bg-green-500/15 border border-green-500/30 text-green-400 cursor-default' : 'bg-white/[0.04] border border-white/10 text-white/50 hover:border-green-500/30 hover:text-green-400'}`}>

@@ -195,7 +195,7 @@ export default function FounderDashboard() {
 
     // 3. Investor interest marks (investor_interest collection)
     let interestMarks = []
-    try { interestMarks = await getInterestNotificationsForStartup(found.id, user?.uid, user?.email) } catch { }
+    try { interestMarks = await getInterestNotificationsForStartup(found.id, found.uid || user?.uid, found.founder_email || found.email || user?.email) } catch (err) { console.error('[FounderDashboard] interest marks error:', err) }
     console.log('[FounderDashboard] interestMarks:', interestMarks.length)
 
     // Merge investor-initiated + interest marks, deduplicate by id

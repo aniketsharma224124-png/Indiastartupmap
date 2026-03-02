@@ -428,3 +428,6 @@ build/
 .env.local
 .env.*.local
 "scripts/serviceAccountKey.json" 
+
+.vercel
+.env*.local
