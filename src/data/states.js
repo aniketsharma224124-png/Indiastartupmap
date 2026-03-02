@@ -1,0 +1,46 @@
+export const INDIAN_STATES = [
+  { id: 'andhra-pradesh',    name: 'Andhra Pradesh',    cx: 350, cy: 490, region: 'south' },
+  { id: 'arunachal-pradesh', name: 'Arunachal Pradesh', cx: 535, cy: 195, region: 'northeast' },
+  { id: 'assam',             name: 'Assam',             cx: 500, cy: 225, region: 'northeast' },
+  { id: 'bihar',             name: 'Bihar',             cx: 390, cy: 265, region: 'east' },
+  { id: 'chhattisgarh',      name: 'Chhattisgarh',      cx: 355, cy: 365, region: 'central' },
+  { id: 'goa',               name: 'Goa',               cx: 215, cy: 485, region: 'west' },
+  { id: 'gujarat',           name: 'Gujarat',           cx: 165, cy: 320, region: 'west' },
+  { id: 'haryana',           name: 'Haryana',           cx: 250, cy: 180, region: 'north' },
+  { id: 'himachal-pradesh',  name: 'Himachal Pradesh',  cx: 270, cy: 140, region: 'north' },
+  { id: 'jharkhand',         name: 'Jharkhand',         cx: 410, cy: 310, region: 'east' },
+  { id: 'karnataka',         name: 'Karnataka',         cx: 265, cy: 510, region: 'south' },
+  { id: 'kerala',            name: 'Kerala',            cx: 255, cy: 575, region: 'south' },
+  { id: 'madhya-pradesh',    name: 'Madhya Pradesh',    cx: 295, cy: 330, region: 'central' },
+  { id: 'maharashtra',       name: 'Maharashtra',       cx: 255, cy: 415, region: 'west' },
+  { id: 'manipur',           name: 'Manipur',           cx: 545, cy: 255, region: 'northeast' },
+  { id: 'meghalaya',         name: 'Meghalaya',         cx: 490, cy: 245, region: 'northeast' },
+  { id: 'mizoram',           name: 'Mizoram',           cx: 530, cy: 285, region: 'northeast' },
+  { id: 'nagaland',          name: 'Nagaland',          cx: 555, cy: 230, region: 'northeast' },
+  { id: 'odisha',            name: 'Odisha',            cx: 405, cy: 390, region: 'east' },
+  { id: 'punjab',            name: 'Punjab',            cx: 225, cy: 160, region: 'north' },
+  { id: 'rajasthan',         name: 'Rajasthan',         cx: 200, cy: 255, region: 'north' },
+  { id: 'sikkim',            name: 'Sikkim',            cx: 455, cy: 205, region: 'northeast' },
+  { id: 'tamil-nadu',        name: 'Tamil Nadu',        cx: 300, cy: 560, region: 'south' },
+  { id: 'telangana',         name: 'Telangana',         cx: 320, cy: 450, region: 'south' },
+  { id: 'tripura',           name: 'Tripura',           cx: 510, cy: 270, region: 'northeast' },
+  { id: 'uttar-pradesh',     name: 'Uttar Pradesh',     cx: 320, cy: 235, region: 'north' },
+  { id: 'uttarakhand',       name: 'Uttarakhand',       cx: 285, cy: 175, region: 'north' },
+  { id: 'west-bengal',       name: 'West Bengal',       cx: 440, cy: 300, region: 'east' },
+  { id: 'delhi',             name: 'Delhi',             cx: 265, cy: 200, region: 'north', isUT: true },
+  { id: 'jammu-kashmir',     name: 'J & K',             cx: 230, cy: 100, region: 'north', isUT: true },
+  { id: 'ladakh',            name: 'Ladakh',            cx: 265, cy: 80,  region: 'north', isUT: true },
+  { id: 'puducherry',        name: 'Puducherry',        cx: 320, cy: 545, region: 'south', isUT: true },
+]
+
+export const REGION_COLORS = {
+  north:     { fill: '#1a3a5c', hover: '#2a5a8c', active: '#3B7DD8' },
+  south:     { fill: '#1a4a3a', hover: '#2a6a5a', active: '#2ecc9a' },
+  east:      { fill: '#3a2a1a', hover: '#5a4a2a', active: '#e67e22' },
+  west:      { fill: '#2a1a3a', hover: '#4a2a5a', active: '#9b59b6' },
+  central:   { fill: '#3a1a1a', hover: '#5a2a2a', active: '#e74c3c' },
+  northeast: { fill: '#1a3a2a', hover: '#2a5a4a', active: '#1abc9c' },
+}
+
+export const getStateById   = (id)   => INDIAN_STATES.find(s => s.id === id)
+export const getStateByName = (name) => INDIAN_STATES.find(s => s.name === name)

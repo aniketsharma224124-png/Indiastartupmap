@@ -1,0 +1,140 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: #0A0E1A;
+    color: #E8EAF0;
+    font-family: 'DM Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #0A0E1A;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #1e3a5f;
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3B7DD8;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-gradient-to-r from-blue-600 to-blue-800 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue-500/30 active:scale-95 text-sm cursor-pointer;
+  }
+
+  .btn-secondary {
+    @apply bg-white/5 border border-white/10 text-white/70 font-medium px-6 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:text-white text-sm cursor-pointer;
+  }
+
+  .card {
+    @apply bg-white/[0.03] border border-white/[0.07] rounded-2xl backdrop-blur-sm;
+  }
+
+  .input-label {
+    @apply block text-[10px] text-white/35 uppercase tracking-widest mb-1.5;
+  }
+
+  .input-field {
+    @apply w-full bg-white/5 border border-white/15 text-white rounded-lg px-4 py-3 text-sm placeholder-white/30 focus:outline-none focus:border-blue-400/50 focus:bg-white/10 transition-all duration-200;
+  }
+
+  .input-field option {
+    background-color: #0D1525;
+    color: #ffffff;
+  }
+
+  .section-label {
+    @apply text-[11px] text-blue-400 tracking-[3px] uppercase mb-2 block;
+  }
+
+  .badge-premium {
+    @apply text-[9px] font-black tracking-wider bg-yellow-400 text-black px-2 py-0.5 rounded;
+  }
+
+  .state-pill {
+    @apply cursor-pointer bg-blue-400/10 border border-blue-400/20 rounded-full px-4 py-1.5 text-xs text-blue-400 transition-all duration-200 hover:bg-blue-400/20 hover:scale-105;
+  }
+
+  .glow-line {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(99, 179, 255, 0.3), transparent);
+  }
+
+  .modal-backdrop {
+    backdrop-filter: blur(12px);
+    background: rgba(5, 8, 16, 0.8);
+  }
+}
+
+.india-state {
+  transition: fill 0.2s ease, filter 0.2s ease;
+  cursor: pointer;
+}
+
+.india-state:hover {
+  filter: brightness(1.5);
+}
+
+.india-state.active {
+  filter: brightness(1.8) drop-shadow(0 0 8px rgba(99, 179, 255, 0.7));
+}
+
+.particle {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: float var(--dur, 10s) ease-in-out var(--delay, 0s) infinite alternate;
+}
+
+/* ── FIXED AD PANELS ─────────────────────────────────────────────────── */
+/* Fixed left/right, between navbar and toggler. Hidden below 1280px.     */
+/* max-height capped so panels stay in the upper viewport area only       */
+.ism-ad-left,
+.ism-ad-right {
+  display: none;
+  position: fixed !important;
+  top: 72px !important;
+  z-index: 5;
+  pointer-events: none;
+  max-height: 400px;
+  overflow: hidden;
+}
+
+.ism-ad-left>*,
+.ism-ad-right>* {
+  pointer-events: auto;
+}
+
+@media screen and (min-width: 1280px) {
+  .ism-ad-left {
+    display: block;
+    left: 6px;
+  }
+
+  .ism-ad-right {
+    display: block;
+    right: 6px;
+  }
+}
