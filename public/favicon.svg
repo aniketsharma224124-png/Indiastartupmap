@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" width="400" height="400">
+  <defs>
+    <radialGradient id="nb2" cx="50%" cy="45%" r="60%"><stop offset="0%" stopColor="#0F1D35" /><stop offset="100%" stopColor="#040810" /></radialGradient>
+    <linearGradient id="ngo2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#FFE066" /><stop offset="50%" stopColor="#F6A800" /><stop offset="100%" stopColor="#D4820A" /></linearGradient>
+    <linearGradient id="nbl2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#4A9EFF" /><stop offset="100%" stopColor="#1A5FC8" /></linearGradient>
+    <filter id="ngf2"><feGaussianBlur stdDeviation="3" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
+  </defs>
+  <circle cx="200" cy="200" r="185" fill="url(#nb2)" />
+  <g transform="translate(106,62) scale(0.59)">
+    <path d="M110 10 L155 5 L195 15 L215 35 L210 65 L235 70 L255 55 L280 60 L290 90 L275 115 L285 140 L270 165 L290 180 L285 210 L265 235 L270 265 L255 290 L235 310 L210 330 L195 360 L175 385 L155 395 L135 385 L115 370 L95 345 L80 315 L70 285 L55 260 L50 230 L60 200 L45 175 L55 150 L75 135 L65 110 L75 85 L90 65 L95 40 Z" fill="url(#nbl2)" opacity="0.88" />
+  </g>
+  <circle cx="178" cy="266" r="6" fill="#F6C90E" filter="url(#ngf2)" opacity="0.95" />
+  <circle cx="162" cy="233" r="4.5" fill="#63B3FF" filter="url(#ngf2)" opacity="0.9" />
+  <g transform="translate(218,120)">
+    <path d="M18 0 C8 0 0 8 0 18 C0 30 18 50 18 50 C18 50 36 30 36 18 C36 8 28 0 18 0Z" fill="url(#ngo2)" />
+    <circle cx="18" cy="18" r="9" fill="#0A0E1A" opacity="0.65" />
+    <circle cx="18" cy="18" r="5" fill="url(#ngo2)" opacity="0.9" />
+  </g>
+  <circle cx="200" cy="200" r="185" fill="none" stroke="url(#ngo2)" stroke-width="1.2" opacity="0.15" />
+</svg>
