@@ -103,9 +103,16 @@ export default function InvestorDashboard() {
   }
 
   const handleAction = async (id, status) => {
+    const prevStatus = inbox.find(r => r.id === id)?.status
     setInbox(prev => prev.map(r => r.id === id ? { ...r, status } : r))
-    try { await updateIntroRequestStatus(id, status) } catch { toast.error('Failed to update.') }
-    toast.success(status === 'accepted' ? '✓ Accepted! Founder will be notified.' : 'Request declined.')
+    try {
+      await updateIntroRequestStatus(id, status)
+      toast.success(status === 'accepted' ? '✓ Accepted! Founder will be notified.' : 'Request declined.')
+    } catch (err) {
+      console.error('[handleAction] error:', err)
+      setInbox(prev => prev.map(r => r.id === id ? { ...r, status: prevStatus || 'pending' } : r))
+      toast.error('Failed to update: ' + (err.message || 'Check console'))
+    }
   }
 
   const handleSendInvestorIntro = async (startup) => {

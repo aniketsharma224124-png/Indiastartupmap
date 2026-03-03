@@ -182,19 +182,30 @@ export default function FounderDashboard() {
   const loadProfileData = async (found) => {
     console.log('[FounderDashboard] loadProfileData:', { startupId: found.id, email: user?.email })
 
-    // 1. Founder-sent intros
-    let reqs = await getIntroRequestsByStartup(found.id)
-    if (reqs.length === 0 && user?.email) reqs = await getIntroRequestsByFounderEmail(user.email)
-    const founderReqs = reqs.filter(r => !r.direction || r.direction === 'founder_to_investor' || r.direction === 'founder_to_founder')
+    // 1. Get ALL intro_requests related to this startup (by startup_id + by email)
+    let allReqs = await getIntroRequestsByStartup(found.id)
+    if (user?.email) {
+      const emailReqs = await getIntroRequestsByFounderEmail(user.email)
+      // Merge & deduplicate
+      const seen = new Set(allReqs.map(r => r.id))
+      emailReqs.forEach(r => { if (!seen.has(r.id)) { allReqs.push(r); seen.add(r.id) } })
+    }
 
-    // 2. Investor-initiated intro_requests
-    const investorReqs = reqs.filter(r => r.direction === 'investor_to_founder')
+    // 2. Split by direction
+    // "My Requests" = founder sent to investor (show with status badges)
+    const founderReqs = allReqs.filter(r => !r.direction || r.direction === 'founder_to_investor')
+
+    // 3. Inbox items: investor-to-founder + investor_interest + accepted founder intros
+    const investorReqs = allReqs.filter(r => r.direction === 'investor_to_founder')
+    const acceptedByInvestor = founderReqs.filter(r => r.status === 'accepted')
+
+    // Also fetch investor-initiated intros by founder email
     let invInitiated = []
     if (user?.email) {
       try { invInitiated = await getInvestorInitiatedIntrosForFounder(user.email) } catch { }
     }
 
-    // 3. Interest marks (now from intro_requests with direction='investor_interest')
+    // Interest marks
     let interestMarks = []
     try {
       interestMarks = await getInterestNotificationsForStartup(
@@ -203,13 +214,14 @@ export default function FounderDashboard() {
         found.founder_email || found.email || user?.email
       )
     } catch (err) { console.error('[FounderDashboard] interest marks error:', err) }
-    console.log('[FounderDashboard] inbox:', { founderReqs: founderReqs.length, investorReqs: investorReqs.length, invInitiated: invInitiated.length, interestMarks: interestMarks.length })
 
-    // Merge all inbox items
-    const allInbox = [...investorReqs, ...invInitiated, ...interestMarks]
-    const seen = new Set()
-    const dedupedInbox = allInbox.filter(r => { if (seen.has(r.id)) return false; seen.add(r.id); return true })
+    // Merge all inbox items (investor reqs + investor-initiated + interest + accepted)
+    const allInbox = [...investorReqs, ...invInitiated, ...interestMarks, ...acceptedByInvestor]
+    const seenInbox = new Set()
+    const dedupedInbox = allInbox.filter(r => { if (seenInbox.has(r.id)) return false; seenInbox.add(r.id); return true })
     dedupedInbox.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0))
+
+    console.log('[FounderDashboard] inbox:', { founderReqs: founderReqs.length, investorReqs: investorReqs.length, invInitiated: invInitiated.length, interestMarks: interestMarks.length, acceptedByInvestor: acceptedByInvestor.length })
 
     setIntros(founderReqs)
     setInvestorIntros(dedupedInbox)
@@ -533,29 +545,35 @@ export default function FounderDashboard() {
                 <div className="space-y-4">
                   {investorIntros.map(r => {
                     const isInterest = r.type === 'interest'
+                    const isAccepted = r.status === 'accepted' && (!r.direction || r.direction === 'founder_to_investor')
                     const firmName = r.investor_firm || r.startup_name || 'Investor'
                     return (
                       <div key={r.id} className="rounded-2xl overflow-hidden"
-                        style={{ background: isInterest ? 'rgba(155,111,255,0.04)' : 'rgba(0,208,156,0.03)', border: `1px solid ${isInterest ? 'rgba(155,111,255,0.2)' : 'rgba(0,208,156,0.15)'}` }}>
+                        style={{ background: isAccepted ? 'rgba(0,208,156,0.06)' : isInterest ? 'rgba(155,111,255,0.04)' : 'rgba(0,208,156,0.03)', border: `1px solid ${isAccepted ? 'rgba(0,208,156,0.25)' : isInterest ? 'rgba(155,111,255,0.2)' : 'rgba(0,208,156,0.15)'}` }}>
                         <div className="p-5">
                           <div className="flex items-start gap-3">
-                            <div className={`w-11 h-11 rounded-xl flex-shrink-0 flex items-center justify-center font-black text-sm ${isInterest ? 'bg-purple-500/20 text-purple-300' : 'bg-green-500/20 text-green-300'}`}>
+                            <div className={`w-11 h-11 rounded-xl flex-shrink-0 flex items-center justify-center font-black text-sm ${isAccepted ? 'bg-green-500/20 text-green-300' : isInterest ? 'bg-purple-500/20 text-purple-300' : 'bg-green-500/20 text-green-300'}`}>
                               {firmName[0]}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <div className={`text-[10px] uppercase tracking-widest mb-1 font-black ${isInterest ? 'text-purple-400' : 'text-green-400'}`}>
-                                {isInterest ? '🔖 Marked as Interested' : '🔔 Investor wants to connect'}
+                              <div className={`text-[10px] uppercase tracking-widest mb-1 font-black ${isAccepted ? 'text-green-400' : isInterest ? 'text-purple-400' : 'text-green-400'}`}>
+                                {isAccepted ? '✅ Intro Accepted!' : isInterest ? '🔖 Marked as Interested' : '🔔 Investor wants to connect'}
                               </div>
                               <div className="font-black text-white text-sm">{firmName}</div>
                               <div className="text-xs text-white/40">
-                                {isInterest ? `${firmName} marked your startup as interested` : `via ${r.partner_name}`}
+                                {isAccepted ? `${firmName} accepted your intro request!` : isInterest ? `${firmName} marked your startup as interested` : `via ${r.partner_name}`}
                                 {' · '}{timeAgo(r.created_at)}
                               </div>
                             </div>
                           </div>
 
                           {/* Message / context */}
-                          {isInterest ? (
+                          {isAccepted ? (
+                            <div className="mt-3 p-3 rounded-xl text-xs leading-relaxed"
+                              style={{ background: 'rgba(0,208,156,0.08)', border: '1px solid rgba(0,208,156,0.15)', color: 'rgba(255,255,255,0.6)' }}>
+                              🎉 <strong className="text-green-300">{firmName}</strong> has accepted your intro! Check your email for further communication.
+                            </div>
+                          ) : isInterest ? (
                             <div className="mt-3 p-3 rounded-xl text-xs leading-relaxed"
                               style={{ background: 'rgba(155,111,255,0.06)', border: '1px solid rgba(155,111,255,0.12)', color: 'rgba(255,255,255,0.5)' }}>
                               💡 <strong className="text-purple-300">{firmName}</strong> has bookmarked your startup and may be interested in investing. Send them your intro to start the conversation.
@@ -568,16 +586,18 @@ export default function FounderDashboard() {
                           ) : null}
 
                           {/* Action row */}
-                          <div className="mt-4 flex gap-2 items-center">
-                            <div className={`flex-1 p-2 rounded-lg text-xs text-center ${isInterest ? 'text-purple-400/70 bg-purple-500/5 border border-purple-500/10' : 'text-green-400/70 bg-green-500/5 border border-green-500/10'}`}>
-                              {isInterest ? `📌 ${firmName} marked you as interested` : `✅ ${firmName} wants to connect with you!`}
+                          {!isAccepted && (
+                            <div className="mt-4 flex gap-2 items-center">
+                              <div className={`flex-1 p-2 rounded-lg text-xs text-center ${isInterest ? 'text-purple-400/70 bg-purple-500/5 border border-purple-500/10' : 'text-green-400/70 bg-green-500/5 border border-green-500/10'}`}>
+                                {isInterest ? `📌 ${firmName} marked you as interested` : `✅ ${firmName} wants to connect with you!`}
+                              </div>
+                              <button onClick={() => setReplyTarget(r)}
+                                className="flex-shrink-0 px-4 py-2 rounded-lg text-xs font-black text-white transition-all hover:opacity-90"
+                                style={{ background: 'linear-gradient(135deg,#1a4a8a,#2a6abf)' }}>
+                                ✉️ Request Intro →
+                              </button>
                             </div>
-                            <button onClick={() => setReplyTarget(r)}
-                              className="flex-shrink-0 px-4 py-2 rounded-lg text-xs font-black text-white transition-all hover:opacity-90"
-                              style={{ background: 'linear-gradient(135deg,#1a4a8a,#2a6abf)' }}>
-                              ✉️ Request Intro →
-                            </button>
-                          </div>
+                          )}
                         </div>
                       </div>
                     )

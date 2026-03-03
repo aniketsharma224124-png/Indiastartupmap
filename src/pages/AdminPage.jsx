@@ -30,11 +30,20 @@ export default function AdminPage() {
       setInvestors(pendI)
       // Fetch ALL startups
       const sSnap = await getDocs(collection(db, 'startups'))
-      setAllStartups(sSnap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.created_at || '').localeCompare(a.created_at || '')))
+      const toMs = d => d?.toMillis ? d.toMillis() : d?.seconds ? d.seconds * 1000 : typeof d === 'string' ? new Date(d).getTime() : 0
+      const allS = sSnap.docs.map(d => ({ id: d.id, ...d.data() }))
+      allS.sort((a, b) => toMs(b.created_at) - toMs(a.created_at))
+      setAllStartups(allS)
       // Fetch ALL investors
       const iSnap = await getDocs(collection(db, 'investors'))
-      setAllInvestors(iSnap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.created_at || '').localeCompare(a.created_at || '')))
-    } catch { toast.error('Failed to load data') }
+      const allI = iSnap.docs.map(d => ({ id: d.id, ...d.data() }))
+      allI.sort((a, b) => toMs(b.created_at) - toMs(a.created_at))
+      setAllInvestors(allI)
+      console.log('[Admin] Loaded:', allS.length, 'startups,', allI.length, 'investors')
+    } catch (err) {
+      console.error('[Admin] fetchAll error:', err)
+      toast.error('Failed to load data: ' + (err.message || ''))
+    }
     finally { setLoading(false) }
   }
 
@@ -80,7 +89,11 @@ export default function AdminPage() {
     } catch (err) { toast.error('Delete failed: ' + (err.message || '')) }
   }
 
-  const fmt = d => d ? new Date(d).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '—'
+  const fmt = d => {
+    if (!d) return '—'
+    const date = d?.toDate ? d.toDate() : d?.seconds ? new Date(d.seconds * 1000) : new Date(d)
+    return date.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+  }
 
   // ── LOGIN SCREEN ──
   if (!session) return (

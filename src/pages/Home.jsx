@@ -442,6 +442,41 @@ function StartupListingPanel() {
     if (view === 'browse') loadStartups(stateFilter || undefined)
   }, [view, stateFilter])
 
+  // Elite Filters helper
+  const applyEliteFilters = (list) => {
+    let filtered = list
+    if (advFilters.revenue) {
+      const ranges = { '0-1L': [0, 100000], '1L-10L': [100000, 1000000], '10L-50L': [1000000, 5000000], '50L-1Cr': [5000000, 10000000], '1Cr+': [10000000, Infinity] }
+      const r = ranges[advFilters.revenue] || [0, Infinity]
+      filtered = filtered.filter(s => { const v = parseFloat(s.revenue) || 0; return v >= r[0] && v < r[1] })
+    }
+    if (advFilters.funding) {
+      if (advFilters.funding === 'bootstrapped') {
+        filtered = filtered.filter(s => !s.funding_raised || s.funding_raised === 'bootstrapped' || parseFloat(s.funding_raised) === 0)
+      } else {
+        const ranges = { '0-25L': [0, 2500000], '25L-1Cr': [2500000, 10000000], '1Cr-5Cr': [10000000, 50000000], '5Cr+': [50000000, Infinity] }
+        const r = ranges[advFilters.funding] || [0, Infinity]
+        filtered = filtered.filter(s => { const v = parseFloat(s.funding_raised) || 0; return v >= r[0] && v < r[1] })
+      }
+    }
+    if (advFilters.growth) {
+      const ranges = { '0-10': [0, 10], '10-50': [10, 50], '50-100': [50, 100], '100+': [100, Infinity] }
+      const r = ranges[advFilters.growth] || [0, Infinity]
+      filtered = filtered.filter(s => { const v = parseFloat(s.growth_rate || s.growth) || 0; return v >= r[0] && v < r[1] })
+    }
+    if (advFilters.teamSize) {
+      const ranges = { 'solo': [1, 1], '2-5': [2, 5], '6-20': [6, 20], '21-50': [21, 50], '50+': [50, Infinity] }
+      const r = ranges[advFilters.teamSize] || [0, Infinity]
+      filtered = filtered.filter(s => { const v = parseInt(s.team_size) || 1; return v >= r[0] && v <= r[1] })
+    }
+    if (advFilters.stage) {
+      filtered = filtered.filter(s => (s.stage || '').toLowerCase().trim().split(' ').join('_') === advFilters.stage)
+    }
+    return filtered
+  }
+
+  const filteredStartups = applyEliteFilters(startups)
+
   return (
     <div className="card flex flex-col" style={{ minHeight: '520px' }}>
       {/* Tab switcher */}
@@ -507,12 +542,12 @@ function StartupListingPanel() {
           <div className="flex-1 overflow-y-auto space-y-3" style={{ maxHeight: '55vh', scrollbarWidth: 'thin', scrollbarColor: 'rgba(74,158,255,0.2) transparent' }}>
             {loading ? (
               <div className="text-center py-12 text-white/25 text-sm">Loading startups…</div>
-            ) : startups.length === 0 ? (
+            ) : filteredStartups.length === 0 ? (
               <div className="text-center py-12">
                 <div className="text-3xl mb-3">🚀</div>
                 <p className="text-sm text-white/30">No startups found{stateFilter ? ` in ${stateFilter}` : ''}.</p>
               </div>
-            ) : startups.map(s => (
+            ) : filteredStartups.map(s => (
               <div key={s.id} className="rounded-xl p-3 transition-all hover:border-white/15"
                 style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}>
                 <div className="flex gap-3 items-start mb-2">

@@ -302,15 +302,16 @@ function StatePanel({ stateId, stateName, startupCount, investorCount, mode, onC
               startups.map(s => (
                 <div key={s.id} className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-3 hover:border-white/15 transition-colors">
                   <div className="flex gap-3 items-start mb-2">
-                    <div className="w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center text-white font-black text-sm"
+                    <Link to={`/startup/${s.id}`}
+                      className="w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center text-white font-black text-sm hover:opacity-80 transition-opacity overflow-hidden"
                       style={{ background: s.brand_color || '#3B7DD8', fontFamily: 'Playfair Display,serif' }}>
                       {s.logo_url
                         ? <img src={s.logo_url} alt={s.company_name} className="w-full h-full rounded-xl object-cover" />
                         : s.company_name?.[0]}
-                    </div>
+                    </Link>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap mb-0.5">
-                        <span className="font-bold text-white text-sm">{s.company_name}</span>
+                        <Link to={`/startup/${s.id}`} className="font-bold text-white text-sm hover:text-blue-300 transition-colors">{s.company_name}</Link>
                         {s.sector && (
                           <span className="text-[9px] bg-blue-500/10 border border-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full">
                             {s.sector}
