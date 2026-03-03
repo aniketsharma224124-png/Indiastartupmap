@@ -35,10 +35,10 @@ function AdPanelsPortal() {
   }, [])
   if (!mounted || location.pathname !== '/' || !wide) return null
   const base = {
-    position: 'fixed',
+    position: 'absolute',
     top: 160,
     zIndex: 40,
-    pointerEvents: 'auto',
+    pointerEvents: 'none',
   }
   return createPortal(
     <>

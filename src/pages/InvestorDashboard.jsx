@@ -60,6 +60,7 @@ export default function InvestorDashboard() {
     ])
     console.log('[InvestorDashboard] inbox results:', requests.length, 'saved:', savedList.length, 'marked:', markedList.length)
     if (requests.length > 0) console.log('[InvestorDashboard] first request:', requests[0])
+    requests.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0))
     setInbox(requests)
     setSaved(savedList)
     setMarked(markedList)

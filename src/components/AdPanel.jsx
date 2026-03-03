@@ -104,7 +104,7 @@ function AdSlot({ pool, startIdx, delayMs = 0 }) {
 // ── VERTICAL PANEL — 3 rotating + 1 advertise slot ──────────────────────────
 function Panel({ pool }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 7, width: 138, padding: '4px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 7, width: 138, padding: '4px', pointerEvents: 'auto' }}>
       <AdSlot pool={pool} startIdx={0} delayMs={0} />
       <AdSlot pool={pool} startIdx={2} delayMs={2333} />
       <AdSlot pool={pool} startIdx={4} delayMs={4666} />

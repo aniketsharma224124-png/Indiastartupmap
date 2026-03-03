@@ -209,6 +209,7 @@ export default function FounderDashboard() {
     const allInbox = [...investorReqs, ...invInitiated, ...interestMarks]
     const seen = new Set()
     const dedupedInbox = allInbox.filter(r => { if (seen.has(r.id)) return false; seen.add(r.id); return true })
+    dedupedInbox.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0))
 
     setIntros(founderReqs)
     setInvestorIntros(dedupedInbox)
