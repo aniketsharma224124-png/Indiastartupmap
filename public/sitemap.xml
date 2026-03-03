@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Homepage -->
+  <url><loc>https://indiastartupmap.com/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>
+
+  <!-- Investor Map -->
+  <url><loc>https://indiastartupmap.com/?mode=investor</loc><changefreq>daily</changefreq><priority>0.9</priority></url>
+
+  <!-- Core Pages -->
+  <url><loc>https://indiastartupmap.com/pricing</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://indiastartupmap.com/investor-listing</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://indiastartupmap.com/ad-plan</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://indiastartupmap.com/contact</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://indiastartupmap.com/privacy</loc><changefreq>monthly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://indiastartupmap.com/terms</loc><changefreq>monthly</changefreq><priority>0.3</priority></url>
+
+  <!-- State Pages -->
+  <url><loc>https://indiastartupmap.com/state/andhra-pradesh</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://indiastartupmap.com/state/arunachal-pradesh</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://indiastartupmap.com/state/assam</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://indiastartupmap.com/state/bihar</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://indiastartupmap.com/state/chhattisgarh</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://indiastartupmap.com/state/goa</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://indiastartupmap.com/state/gujarat</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://indiastartupmap.com/state/haryana</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://indiastartupmap.com/state/himachal-pradesh</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://indiastartupmap.com/state/jharkhand</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://indiastartupmap.com/state/karnataka</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://indiastartupmap.com/state/kerala</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://indiastartupmap.com/state/madhya-pradesh</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://indiastartupmap.com/state/maharashtra</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://indiastartupmap.com/state/manipur</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://indiastartupmap.com/state/meghalaya</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://indiastartupmap.com/state/mizoram</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://indiastartupmap.com/state/nagaland</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://indiastartupmap.com/state/odisha</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://indiastartupmap.com/state/punjab</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://indiastartupmap.com/state/rajasthan</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://indiastartupmap.com/state/sikkim</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://indiastartupmap.com/state/tamil-nadu</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://indiastartupmap.com/state/telangana</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://indiastartupmap.com/state/tripura</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://indiastartupmap.com/state/uttar-pradesh</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://indiastartupmap.com/state/uttarakhand</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://indiastartupmap.com/state/west-bengal</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://indiastartupmap.com/state/delhi</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://indiastartupmap.com/state/jammu-kashmir</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://indiastartupmap.com/state/ladakh</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://indiastartupmap.com/state/puducherry</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+</urlset>

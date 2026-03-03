@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Disallow admin/dashboard pages
+Disallow: /admin
+Disallow: /dashboard/
+
+# Sitemap
+Sitemap: https://indiastartupmap.com/sitemap.xml
