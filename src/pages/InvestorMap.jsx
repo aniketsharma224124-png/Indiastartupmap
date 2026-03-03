@@ -300,18 +300,20 @@ function StatePanel({ stateId, stateName, startupCount, investorCount, mode, onC
               </div>
             ) : (
               startups.map(s => (
-                <div key={s.id} className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-3 hover:border-white/15 transition-colors">
+                <div key={s.id}
+                  onClick={() => navigate(`/startup/${s.id}`)}
+                  className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-3 hover:border-blue-500/30 transition-colors cursor-pointer">
                   <div className="flex gap-3 items-start mb-2">
-                    <Link to={`/startup/${s.id}`}
-                      className="w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center text-white font-black text-sm hover:opacity-80 transition-opacity overflow-hidden"
+                    <div
+                      className="w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center text-white font-black text-sm overflow-hidden"
                       style={{ background: s.brand_color || '#3B7DD8', fontFamily: 'Playfair Display,serif' }}>
                       {s.logo_url
                         ? <img src={s.logo_url} alt={s.company_name} className="w-full h-full rounded-xl object-cover" />
                         : s.company_name?.[0]}
-                    </Link>
+                    </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap mb-0.5">
-                        <Link to={`/startup/${s.id}`} className="font-bold text-white text-sm hover:text-blue-300 transition-colors">{s.company_name}</Link>
+                        <span className="font-bold text-white text-sm">{s.company_name}</span>
                         {s.sector && (
                           <span className="text-[9px] bg-blue-500/10 border border-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full">
                             {s.sector}
@@ -331,7 +333,7 @@ function StatePanel({ stateId, stateName, startupCount, investorCount, mode, onC
 
                   {/* Buttons in investor mode */}
                   {mode === 'investor' ? (
-                    <div className="flex gap-2">
+                    <div className="flex gap-2" onClick={e => e.stopPropagation()}>
                       <button
                         onClick={() => handleSendIntro(s)}
                         className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all ${introed[s.id]
@@ -350,11 +352,12 @@ function StatePanel({ stateId, stateName, startupCount, investorCount, mode, onC
                       </button>
                     </div>
                   ) : (
-                    <div className="flex gap-2">
-                      <Link to={`/startup/${s.id}`}
-                        className="flex-1 py-2 rounded-lg text-xs font-bold bg-blue-500/10 border border-blue-500/25 text-blue-400 hover:bg-blue-500/15 hover:border-blue-500/40 transition-all text-center">
+                    <div className="flex gap-2" onClick={e => e.stopPropagation()}>
+                      <button
+                        onClick={() => navigate(`/startup/${s.id}`)}
+                        className="flex-1 py-2 rounded-lg text-xs font-bold bg-blue-500/10 border border-blue-500/25 text-blue-400 hover:bg-blue-500/15 hover:border-blue-500/40 transition-all text-center cursor-pointer">
                         View Profile →
-                      </Link>
+                      </button>
                       {s.website_url && (
                         <a href={s.website_url} target="_blank" rel="noopener noreferrer"
                           className="py-2 px-3 rounded-lg text-xs font-bold bg-white/[0.04] border border-white/10 text-white/40 hover:text-white hover:border-white/20 transition-all">

@@ -172,6 +172,7 @@ function IntroModal({ investor, onClose, onSent }) {
 // ── STATE SIDE PANEL ─────────────────────────────────────────────
 function StatePanel({ stateId, stateName, startupCounts, investorCounts, onClose }) {
   const { user, profile } = useAuth()
+  const navigate = useNavigate()
   const [tab, setTab] = useState(profile?.role === 'investor' ? 'startups' : 'investors')
   const [startups, setStartups] = useState([])
   const [investors, setInvestors] = useState([])
@@ -277,7 +278,9 @@ function StatePanel({ stateId, stateName, startupCounts, investorCounts, onClose
                 <a href="/?mode=startup#list-startup" className="text-xs text-blue-400 hover:underline">Be the first startup here →</a>
               </div>
             ) : startups.map(s => (
-              <div key={s.id} className="rounded-xl p-4 transition-all hover:border-white/15"
+              <div key={s.id}
+                onClick={() => navigate(`/startup/${s.id}`)}
+                className="rounded-xl p-4 transition-all hover:border-blue-500/30 cursor-pointer"
                 style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}>
                 <div className="flex gap-3 items-start mb-3">
                   <div className="w-11 h-11 rounded-xl flex-shrink-0 flex items-center justify-center text-white font-black text-sm overflow-hidden"
@@ -294,7 +297,12 @@ function StatePanel({ stateId, stateName, startupCounts, investorCounts, onClose
                     {s.stage && <p className="text-[10px] text-white/25 mt-1">Stage: {s.stage}</p>}
                   </div>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2" onClick={e => e.stopPropagation()}>
+                  {/* View Profile */}
+                  <button onClick={() => navigate(`/startup/${s.id}`)}
+                    className="flex-1 py-2 rounded-lg text-xs font-bold bg-blue-500/10 border border-blue-500/25 text-blue-400 hover:bg-blue-500/15 hover:border-blue-500/40 transition-all cursor-pointer">
+                    View Profile →
+                  </button>
                   {/* Intro — sends notification to founder inbox */}
                   <button onClick={async () => {
                     if (!user) { navigate('/?login=investor'); return }
@@ -323,7 +331,7 @@ function StatePanel({ stateId, stateName, startupCounts, investorCounts, onClose
                     } catch (err) { console.error(err) }
                   }}
                     className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all ${savedSt[s.id] ? 'bg-green-500/15 border border-green-500/30 text-green-400 cursor-default' : 'bg-white/[0.04] border border-white/10 text-white/50 hover:border-green-500/30 hover:text-green-400'}`}>
-                    {savedSt[s.id] ? '✓ Interested' : '👀 Mark Interest'}
+                    {savedSt[s.id] ? '✓ Interested' : '👀 Interest'}
                   </button>
                   {s.website_url && (
                     <a href={s.website_url} target="_blank" rel="noopener noreferrer"

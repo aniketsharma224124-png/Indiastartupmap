@@ -115,10 +115,10 @@
 .ism-ad-right {
   display: none;
   position: fixed !important;
-  top: 72px !important;
+  top: 56px !important;
   z-index: 5;
   pointer-events: none;
-  max-height: 400px;
+  max-height: 520px;
   overflow: hidden;
 }
 

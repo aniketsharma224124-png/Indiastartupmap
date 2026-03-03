@@ -36,7 +36,7 @@ function AdPanelsPortal() {
   if (!mounted || location.pathname !== '/' || !wide) return null
   const base = {
     position: 'absolute',
-    top: 160,
+    top: 90,
     zIndex: 40,
     pointerEvents: 'none',
   }

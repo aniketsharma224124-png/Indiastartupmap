@@ -19,7 +19,7 @@ const AD_PLAN = {
   features: [
     'Your logo + company name in the side ad panel',
     'Shown to every visitor on the homepage',
-    'Rotating with other sponsors (3 slots per side)',
+    'Rotating with other sponsors (4 slots per side)',
     'White card design — stands out against dark map',
     'Links directly to your website',
     'Cancel anytime — month-to-month',

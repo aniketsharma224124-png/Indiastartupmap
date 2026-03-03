@@ -1,5 +1,5 @@
 // AdPanel.jsx — Fixed vertical ad panels on left/right sides
-// 3 rotating sponsor slots + 1 advertise slot per side
+// 4 rotating sponsor slots + 1 advertise slot per side
 // User ads from Firestore replace default ads one-by-one.
 // When user ads expire, defaults come back.
 
@@ -38,7 +38,7 @@ function SponsorCard({ ad }) {
       onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
       style={{
         display: 'block', textDecoration: 'none',
-        background: '#ffffff', border: '1px solid #e5e7eb',
+        background: '#f3eeff', border: '1px solid #e0d4f5',
         borderRadius: '12px', padding: '10px 8px 9px',
         textAlign: 'center', cursor: 'pointer',
         width: 130, flexShrink: 0,
@@ -67,8 +67,8 @@ function AdvertiseSlot() {
       onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
       style={{
         display: 'block', textDecoration: 'none',
-        background: hov ? '#eff6ff' : '#ffffff',
-        border: `1.5px dashed ${hov ? '#2563eb' : '#d1d5db'}`,
+        background: hov ? '#ece4ff' : '#f3eeff',
+        border: `1.5px dashed ${hov ? '#7c3aed' : '#c4b5fd'}`,
         borderRadius: '12px', padding: '10px 8px',
         textAlign: 'center', cursor: 'pointer',
         width: 130, flexShrink: 0,
@@ -104,13 +104,14 @@ function AdSlot({ pool, startIdx, delayMs = 0 }) {
   )
 }
 
-// ── VERTICAL PANEL — 3 rotating + 1 advertise slot ──────────────────────────
+// ── VERTICAL PANEL — 4 rotating + 1 advertise slot ──────────────────────────
 function Panel({ pool }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 7, width: 138, padding: '4px', pointerEvents: 'auto' }}>
       <AdSlot pool={pool} startIdx={0} delayMs={0} />
-      <AdSlot pool={pool} startIdx={2} delayMs={2333} />
-      <AdSlot pool={pool} startIdx={4} delayMs={4666} />
+      <AdSlot pool={pool} startIdx={2} delayMs={2000} />
+      <AdSlot pool={pool} startIdx={4} delayMs={4000} />
+      <AdSlot pool={pool} startIdx={6} delayMs={6000} />
       <AdvertiseSlot />
     </div>
   )

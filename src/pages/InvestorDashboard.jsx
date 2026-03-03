@@ -6,6 +6,7 @@ import {
   getAllMyInvestorProfiles, getIntroRequestsByInvestor,
   updateIntroRequestStatus, getSavedStartupsForInvestor,
   getMarkedInterestByInvestor, sendInvestorIntroToStartup,
+  deleteIntroRequest, deleteSavedStartup,
 } from '../lib/investorDb'
 import { INVESTOR_PLANS } from '../lib/razorpay'
 
@@ -113,6 +114,28 @@ export default function InvestorDashboard() {
       setInbox(prev => prev.map(r => r.id === id ? { ...r, status: prevStatus || 'pending' } : r))
       toast.error('Failed to update: ' + (err.message || 'Check console'))
     }
+  }
+
+  const handleDeleteInbox = async (id) => {
+    try {
+      await deleteIntroRequest(id)
+      setInbox(prev => prev.filter(r => r.id !== id))
+      toast.success('Deleted')
+    } catch { toast.error('Failed to delete') }
+  }
+  const handleDeleteMarked = async (id) => {
+    try {
+      await deleteIntroRequest(id)
+      setMarked(prev => prev.filter(r => r.id !== id))
+      toast.success('Deleted')
+    } catch { toast.error('Failed to delete') }
+  }
+  const handleDeleteSaved = async (id) => {
+    try {
+      await deleteSavedStartup(id)
+      setSaved(prev => prev.filter(r => r.id !== id))
+      toast.success('Deleted')
+    } catch { toast.error('Failed to delete') }
   }
 
   const handleSendInvestorIntro = async (startup) => {
@@ -390,11 +413,15 @@ export default function InvestorDashboard() {
                           <div className="flex gap-2 mt-3">
                             <button onClick={() => handleAction(r.id, 'accepted')} className="flex-1 py-2 rounded-lg text-xs font-black text-white" style={{ background: 'linear-gradient(135deg,#00a876,#00D09C)' }}>✓ Accept</button>
                             <button onClick={() => handleAction(r.id, 'declined')} className="flex-1 py-2 rounded-lg text-xs font-black border border-red-500/25 text-red-400/70 hover:text-red-400 hover:bg-red-500/8 transition-all">✕ Decline</button>
+                            <button onClick={() => handleDeleteInbox(r.id)} className="px-3 py-2 rounded-lg text-xs font-bold border border-white/10 text-white/30 hover:text-red-400 hover:border-red-500/25 transition-all" title="Delete">🗑</button>
                           </div>
                         )}
-                        {r.status === 'accepted' && (
-                          <div className="mt-3 p-2 rounded-lg bg-green-500/8 border border-green-500/15 text-xs text-green-400/70 text-center">
-                            ✓ Accepted — reach out via contact details above
+                        {r.status !== 'pending' && (
+                          <div className="flex gap-2 mt-3 items-center">
+                            <div className={`flex-1 p-2 rounded-lg text-xs text-center ${r.status === 'accepted' ? 'bg-green-500/8 border border-green-500/15 text-green-400/70' : 'bg-red-500/8 border border-red-500/15 text-red-400/70'}`}>
+                              {r.status === 'accepted' ? '✓ Accepted — reach out via contact details above' : '✕ Declined'}
+                            </div>
+                            <button onClick={() => handleDeleteInbox(r.id)} className="px-3 py-2 rounded-lg text-xs font-bold border border-white/10 text-white/30 hover:text-red-400 hover:border-red-500/25 transition-all flex-shrink-0" title="Delete">🗑</button>
                           </div>
                         )}
                       </div>
@@ -432,6 +459,7 @@ export default function InvestorDashboard() {
                         style={{ background: 'rgba(74,158,255,0.08)', border: '1px solid rgba(74,158,255,0.25)', color: '#4A9EFF' }}>
                         ✉️ Intro
                       </button>
+                      <button onClick={() => handleDeleteMarked(s.id)} className="flex-shrink-0 px-2.5 py-1.5 rounded-lg text-xs font-bold border border-white/10 text-white/30 hover:text-red-400 hover:border-red-500/25 transition-all" title="Delete">🗑</button>
                     </div>
                   ))}
                 </div>
@@ -473,6 +501,7 @@ export default function InvestorDashboard() {
                           ✉️ Send Intro
                         </button>
                         {s.website_url && <a href={s.website_url} target="_blank" rel="noopener noreferrer" className="text-xs font-bold px-2.5 py-1.5 rounded-lg border" style={{ background: 'rgba(255,255,255,0.05)', borderColor: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.5)' }}>↗</a>}
+                        <button onClick={() => handleDeleteSaved(s.id)} className="text-xs font-bold px-2.5 py-1.5 rounded-lg border border-white/10 text-white/30 hover:text-red-400 hover:border-red-500/25 transition-all" title="Delete">🗑</button>
                       </div>
                     </div>
                   ))}

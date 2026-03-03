@@ -2,7 +2,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 import {
   getFirestore, collection, query, where,
-  getDocs, addDoc, updateDoc, doc,
+  getDocs, addDoc, updateDoc, doc, deleteDoc,
 } from 'firebase/firestore'
 import { getApps } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
@@ -545,6 +545,26 @@ export async function updateIntroRequestStatus(requestId, status) {
     await updateDoc(doc(db, 'intro_requests', requestId), { status })
   } catch (e) {
     console.error('[updateIntroRequestStatus]', e.code, e.message)
+    throw e
+  }
+}
+
+export async function deleteIntroRequest(requestId) {
+  try {
+    await deleteDoc(doc(db, 'intro_requests', requestId))
+    return true
+  } catch (e) {
+    console.error('[deleteIntroRequest]', e.code, e.message)
+    throw e
+  }
+}
+
+export async function deleteSavedStartup(docId) {
+  try {
+    await deleteDoc(doc(db, 'saved_startups', docId))
+    return true
+  } catch (e) {
+    console.error('[deleteSavedStartup]', e.code, e.message)
     throw e
   }
 }

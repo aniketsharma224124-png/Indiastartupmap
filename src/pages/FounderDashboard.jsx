@@ -17,6 +17,7 @@ import {
   getInvestorInitiatedIntrosForFounder,
   getInterestNotificationsForStartup,
   sendIntroRequest,
+  deleteIntroRequest,
 } from '../lib/investorDb'
 import { PLANS } from '../lib/razorpay'
 
@@ -596,6 +597,18 @@ export default function FounderDashboard() {
                                 style={{ background: 'linear-gradient(135deg,#1a4a8a,#2a6abf)' }}>
                                 ✉️ Request Intro →
                               </button>
+                              <button onClick={async () => { try { await deleteIntroRequest(r.id); setInvestorIntros(p => p.filter(x => x.id !== r.id)); toast.success('Deleted') } catch { toast.error('Failed') } }}
+                                className="flex-shrink-0 px-2.5 py-2 rounded-lg text-xs font-bold border border-white/10 text-white/30 hover:text-red-400 hover:border-red-500/25 transition-all" title="Delete">🗑</button>
+                            </div>
+                          )}
+                          {isAccepted && (
+                            <div className="mt-3 flex gap-2 items-center">
+                              <div className="flex-1 p-3 rounded-xl text-xs leading-relaxed"
+                                style={{ background: 'rgba(0,208,156,0.08)', border: '1px solid rgba(0,208,156,0.15)', color: 'rgba(255,255,255,0.6)' }}>
+                                🎉 <strong className="text-green-300">{firmName}</strong> has accepted your intro! Check your email for further communication.
+                              </div>
+                              <button onClick={async () => { try { await deleteIntroRequest(r.id); setInvestorIntros(p => p.filter(x => x.id !== r.id)); toast.success('Deleted') } catch { toast.error('Failed') } }}
+                                className="flex-shrink-0 px-2.5 py-2 rounded-lg text-xs font-bold border border-white/10 text-white/30 hover:text-red-400 hover:border-red-500/25 transition-all" title="Delete">🗑</button>
                             </div>
                           )}
                         </div>
@@ -631,6 +644,8 @@ export default function FounderDashboard() {
                         <p className="text-xs text-white/35">via {r.partner_name} · {timeAgo(r.created_at)}</p>
                       </div>
                       <StatusBadge status={r.status} />
+                      <button onClick={async () => { try { await deleteIntroRequest(r.id); setIntros(p => p.filter(x => x.id !== r.id)); toast.success('Deleted') } catch { toast.error('Failed') } }}
+                        className="flex-shrink-0 px-2.5 py-1.5 rounded-lg text-xs font-bold border border-white/10 text-white/30 hover:text-red-400 hover:border-red-500/25 transition-all" title="Delete">🗑</button>
                     </div>
                   ))}
                 </div>
