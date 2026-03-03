@@ -9,23 +9,17 @@ service cloud.firestore {
     }
 
     // ── STARTUPS ────────────────────────────────────────────────
-    // Public read (map needs it unauthenticated).
-    // Any logged-in user can create (listing flow).
-    // Only the owner can update/delete.
     match /startups/{docId} {
-      allow read:             if true;
-      allow create:           if request.auth != null;
-      allow update, delete:   if request.auth != null
-        && (resource.data.uid          == request.auth.uid
-         || resource.data.founder_uid  == request.auth.uid);
+      allow read:               if true;
+      allow create:             if request.auth != null;
+      allow update, delete:     if request.auth != null;
     }
 
     // ── INVESTORS ───────────────────────────────────────────────
     match /investors/{docId} {
-      allow read:             if true;
-      allow create:           if request.auth != null;
-      allow update, delete:   if request.auth != null
-        && resource.data.uid == request.auth.uid;
+      allow read:               if true;
+      allow create:             if request.auth != null;
+      allow update, delete:     if request.auth != null;
     }
 
     // ── INVESTOR INTEREST ────────────────────────────────────────
