@@ -350,12 +350,18 @@ function StatePanel({ stateId, stateName, startupCount, investorCount, mode, onC
                       </button>
                     </div>
                   ) : (
-                    s.website_url && (
-                      <a href={s.website_url} target="_blank" rel="noopener noreferrer"
-                        className="w-full py-2 rounded-lg text-xs font-bold bg-white/[0.04] border border-white/10 text-white/40 hover:text-white hover:border-white/20 transition-all block text-center">
-                        Visit Website ↗
-                      </a>
-                    )
+                    <div className="flex gap-2">
+                      <Link to={`/startup/${s.id}`}
+                        className="flex-1 py-2 rounded-lg text-xs font-bold bg-blue-500/10 border border-blue-500/25 text-blue-400 hover:bg-blue-500/15 hover:border-blue-500/40 transition-all text-center">
+                        View Profile →
+                      </Link>
+                      {s.website_url && (
+                        <a href={s.website_url} target="_blank" rel="noopener noreferrer"
+                          className="py-2 px-3 rounded-lg text-xs font-bold bg-white/[0.04] border border-white/10 text-white/40 hover:text-white hover:border-white/20 transition-all">
+                          ↗
+                        </a>
+                      )}
+                    </div>
                   )}
                 </div>
               ))
