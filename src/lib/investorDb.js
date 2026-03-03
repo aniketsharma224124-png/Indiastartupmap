@@ -242,6 +242,7 @@ export async function isStartupSaved(investorUid, startupId) {
 // Founder reads from inbox via getInterestNotificationsForStartup().
 
 export async function markInvestorInterest(investorUid, investorFirm, partnerName, startup) {
+  console.log('[markInvestorInterest] called:', { investorUid, startupId: startup.id, firm: investorFirm })
   try {
     // Single-field query + client-side filter to avoid composite index
     const snap = await getDocs(query(
@@ -249,9 +250,12 @@ export async function markInvestorInterest(investorUid, investorFirm, partnerNam
       where('investor_uid', '==', investorUid),
     ))
     const existing = snap.docs.find(d => d.data().startup_id === startup.id)
-    if (existing) return { already: true }
+    if (existing) {
+      console.log('[markInvestorInterest] already exists')
+      return { already: true }
+    }
 
-    await addDoc(collection(db, 'investor_interest'), {
+    const docData = {
       investor_uid: investorUid,
       investor_firm: investorFirm,
       partner_name: partnerName,
@@ -260,18 +264,18 @@ export async function markInvestorInterest(investorUid, investorFirm, partnerNam
       startup_logo: startup.logo_url || '',
       brand_color: startup.brand_color || '#9B6FFF',
       founder_email: startup.founder_email || startup.email || '',
-      // Store startup owner uid so founder can query by uid too
       startup_uid: startup.uid || '',
       sector: startup.sector || '',
       state: startup.state || '',
       website_url: startup.website_url || '',
       description: startup.description || '',
       created_at: new Date().toISOString(),
-    })
-    console.log('[markInvestorInterest] success for startup:', startup.id)
+    }
+    const ref = await addDoc(collection(db, 'investor_interest'), docData)
+    console.log('[markInvestorInterest] SUCCESS! Doc ID:', ref.id)
     return { success: true }
   } catch (e) {
-    console.error('[markInvestorInterest]', e.code, e.message)
+    console.error('[markInvestorInterest] FAILED:', e.code, e.message)
     return null
   }
 }
