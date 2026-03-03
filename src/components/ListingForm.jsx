@@ -37,6 +37,19 @@ export default function ListingForm({ premiumSlotsLeft = 99 }) {
   const set = f => e => setForm(p => ({ ...p, [f]: e.target.value }))
 
   useEffect(() => {
+    // Only scroll if we are not initial mount step 0
+    if (step > 0 || resuming) {
+      setTimeout(() => {
+        const el = document.getElementById('list-startup')
+        if (el) {
+          const top = el.getBoundingClientRect().top + window.scrollY - 100
+          window.scrollTo({ top, behavior: 'smooth' })
+        }
+      }, 50)
+    }
+  }, [step, resuming])
+
+  useEffect(() => {
     const params = new URLSearchParams(location.search)
     if (params.get('resume') === 'listing' && user) {
       const saved = sessionStorage.getItem(SAVE_KEY)

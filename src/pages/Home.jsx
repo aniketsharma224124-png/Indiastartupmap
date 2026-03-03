@@ -647,11 +647,22 @@ export default function Home() {
       setMode('investor')
       localStorage.setItem('ism_map_mode', 'investor')
       setTimeout(() => {
-        document.getElementById('list-startup')?.scrollIntoView({ behavior: 'smooth' })
+        const el = document.getElementById('list-startup')
+        if (el) {
+          const top = el.getBoundingClientRect().top + window.scrollY - 100
+          window.scrollTo({ top, behavior: 'smooth' })
+        }
       }, 200)
     } else if (modeParam === 'startup') {
       setMode('startup')
       localStorage.setItem('ism_map_mode', 'startup')
+      setTimeout(() => {
+        const el = document.getElementById('list-startup')
+        if (el) {
+          const top = el.getBoundingClientRect().top + window.scrollY - 100
+          window.scrollTo({ top, behavior: 'smooth' })
+        }
+      }, 200)
     }
   }, [location.search])
   const [startupCounts, setStartupCounts] = useState({})
@@ -1046,13 +1057,13 @@ export default function Home() {
                     </ul>
                   </div>
                   {isFree ? (
-                    <a href="/#list-startup"
+                    <a href="/?mode=startup#list-startup"
                       className="w-full text-center block py-2.5 rounded-xl font-black text-sm transition-all"
                       style={{ background: 'linear-gradient(135deg,#00D09C,#00a876)', color: '#000' }}>
                       🚀 Claim Free Spot →
                     </a>
                   ) : (
-                    <a href="/#list-startup"
+                    <a href="/?mode=startup#list-startup"
                       className="w-full text-center block py-2.5 rounded-xl font-black text-sm transition-all"
                       style={{ background: isEnt || plan.popular ? 'linear-gradient(135deg,#F6C90E,#d4a500)' : 'rgba(255,255,255,0.06)', color: (isEnt || plan.popular) ? '#000' : 'rgba(255,255,255,0.7)' }}>
                       {isEnt ? '👑 Get Enterprise →' : 'Get Started →'}

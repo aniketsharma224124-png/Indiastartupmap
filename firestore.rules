@@ -45,13 +45,9 @@ service cloud.firestore {
     // Create: any logged-in user (founder or investor can initiate).
     // Update: either party (to accept/decline).
     match /intro_requests/{docId} {
-      allow read:   if request.auth != null;
-      allow create: if request.auth != null;
-      allow update: if request.auth != null
-        && (resource.data.investor_id          == request.auth.uid
-         || resource.data.investor_uid         == request.auth.uid
-         || resource.data.founder_email        == request.auth.token.email
-         || resource.data.recipient_uid        == request.auth.uid);
+      allow read:            if request.auth != null;
+      allow create:          if request.auth != null;
+      allow update, delete:  if request.auth != null;
     }
 
     // ── SAVED STARTUPS ───────────────────────────────────────────
