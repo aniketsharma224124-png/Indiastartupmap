@@ -379,9 +379,11 @@ function StatePanel({ stateId, stateName, startupCount, investorCount, mode, onC
                   style={{ borderColor: inv.open_to_pitches ? 'rgba(0,208,156,0.12)' : undefined }}>
                   <div className="flex gap-3 items-start mb-3">
                     <Link to={`/investor/${inv.id}`}
-                      className="w-11 h-11 rounded-xl flex-shrink-0 flex items-center justify-center text-white font-black text-sm hover:opacity-80 transition-opacity"
+                      className="w-11 h-11 rounded-xl flex-shrink-0 flex items-center justify-center text-white font-black text-sm hover:opacity-80 transition-opacity overflow-hidden"
                       style={{ background: inv.brand_color || '#9B6FFF', fontFamily: 'Playfair Display,serif' }}>
-                      {inv.avatar || inv.firm_name?.[0]}
+                      {inv.logo_url
+                        ? <img src={inv.logo_url} alt={inv.firm_name} className="w-full h-full object-cover rounded-xl" />
+                        : (inv.avatar || inv.firm_name?.[0])}
                     </Link>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap mb-0.5">
@@ -438,6 +440,8 @@ export default function InvestorMap() {
   const [startupCounts, setStartupCounts] = useState({})
   const [investorCounts, setInvestorCounts] = useState({})
   const [tip, setTip] = useState({ show: false, x: 0, y: 0, state: null })
+  const [allInvestorsByState, setAllInvestorsByState] = useState({})
+  const navigate = useNavigate()
 
   // Zoom/pan (same system as IndiaMap)
   const [zoom, setZoom] = useState(1)
@@ -457,11 +461,22 @@ export default function InvestorMap() {
     }).catch(() => { })
 
     getInvestorCountByState().then(setInvestorCounts).catch(() => {
-      // Fall back to local data counts
       const local = {}
       Object.entries(INVESTORS_BY_STATE).forEach(([id, arr]) => { local[id] = arr.length })
       setInvestorCounts(local)
     })
+
+    // Fetch all investors for map bubbles
+    getInvestors().then(all => {
+      const byState = {}
+      all.forEach(inv => {
+        const sid = inv.state_id
+        if (!sid) return
+        if (!byState[sid]) byState[sid] = []
+        byState[sid].push(inv)
+      })
+      setAllInvestorsByState(byState)
+    }).catch(() => { })
 
     return () => cancelAnimationFrame(rafRef.current)
   }, [])
@@ -752,6 +767,39 @@ export default function InvestorMap() {
                     )}
                   </g>
                 )
+              })}
+
+              {/* Investor logo bubbles on map */}
+              {mode === 'investor' && INDIAN_STATES.map(state => {
+                const invs = allInvestorsByState[state.id]
+                if (!invs || invs.length === 0) return null
+                const s = 1 / zoom
+                const shown = invs.slice(0, 3)
+                return shown.map((inv, idx) => {
+                  const angle = (idx * 120 - 90) * (Math.PI / 180)
+                  const dist = 16 * s
+                  const bx = state.cx + Math.cos(angle) * dist
+                  const by = state.cy + Math.sin(angle) * dist
+                  const r = 7 * s
+                  return (
+                    <g key={inv.id} onClick={(e) => { e.stopPropagation(); navigate(`/investor/${inv.id}`) }}
+                      style={{ cursor: 'pointer' }}>
+                      <circle cx={bx} cy={by} r={r + 1 * s} fill="rgba(13,22,40,0.9)" />
+                      <circle cx={bx} cy={by} r={r} fill={inv.brand_color || '#9B6FFF'} />
+                      {inv.logo_url ? (
+                        <image href={inv.logo_url} x={bx - r * 0.7} y={by - r * 0.7}
+                          width={r * 1.4} height={r * 1.4} clipPath={`circle(${r * 0.7}px)`}
+                          preserveAspectRatio="xMidYMid slice" />
+                      ) : (
+                        <text x={bx} y={by + 2.5 * s} textAnchor="middle" fontSize={5 * s}
+                          fill="#fff" fontFamily="DM Sans,sans-serif" fontWeight="900"
+                          style={{ pointerEvents: 'none' }}>
+                          {(inv.avatar || inv.firm_name?.[0] || 'I').slice(0, 2)}
+                        </text>
+                      )}
+                    </g>
+                  )
+                })
               })}
 
               {/* Tooltip */}

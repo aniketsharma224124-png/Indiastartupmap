@@ -318,9 +318,12 @@ function UnlockContactSection({ investor }) {
                 const profile = await getUserProfile(user.uid)
                 if (['premium', 'enterprise'].includes(profile?.plan)) { setCanUnlock(true); return }
                 const { collection, query, where, getDocs } = await import('firebase/firestore')
-                const q = query(collection(db, 'startups'), where('owner_uid', '==', user.uid))
-                const snap = await getDocs(q)
-                if (snap.docs.some(d => ['premium', 'enterprise'].includes(d.data().plan))) { setCanUnlock(true); return }
+                // Check both uid and founder_uid fields
+                const q1 = query(collection(db, 'startups'), where('uid', '==', user.uid))
+                const q2 = query(collection(db, 'startups'), where('founder_uid', '==', user.uid))
+                const [snap1, snap2] = await Promise.all([getDocs(q1), getDocs(q2)])
+                const allDocs = [...snap1.docs, ...snap2.docs]
+                if (allDocs.some(d => ['premium', 'enterprise'].includes(d.data().plan))) { setCanUnlock(true); return }
                 const { getMyInvestorProfile } = await import('../lib/investorDb')
                 const inv = await getMyInvestorProfile(user.uid, user.email)
                 if (['scout_pro', 'partner_elite'].includes(inv?.plan)) { setCanUnlock(true); return }
@@ -329,6 +332,11 @@ function UnlockContactSection({ investor }) {
         }
         checkPlans()
     }, [user])
+
+    // Auto-unlock for premium/enterprise users
+    useEffect(() => {
+        if (canUnlock && !unlocked) setUnlocked(true)
+    }, [canUnlock])
 
     const handleUnlock = () => {
         if (!user) {
@@ -375,15 +383,15 @@ function UnlockContactSection({ investor }) {
                         </div>
                     </div>
                 )}
-                {investor.linkedin_url && (
+                {(investor.linkedin_url || investor.linkedin) && (
                     <div className="flex items-center gap-3 p-3 rounded-xl" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
                         <span className="text-sm">🔗</span>
                         <div>
                             <div className="text-xs text-white/35">LinkedIn</div>
-                            <a href={investor.linkedin_url.startsWith('http') ? investor.linkedin_url : `https://${investor.linkedin_url}`}
+                            <a href={(investor.linkedin_url || investor.linkedin).startsWith('http') ? (investor.linkedin_url || investor.linkedin) : `https://${investor.linkedin_url || investor.linkedin}`}
                                 target="_blank" rel="noopener noreferrer"
                                 className="text-sm font-bold text-purple-400 hover:underline">
-                                {investor.linkedin_url}
+                                {investor.linkedin_url || investor.linkedin}
                             </a>
                         </div>
                     </div>
@@ -416,7 +424,7 @@ function UnlockContactSection({ investor }) {
                     {loading ? 'Unlocking...' : '🔓 Unlock Contact Info'}
                 </button>
             ) : (
-                <Link to="/startup-listing"
+                <Link to="/investor-listing"
                     className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl font-black text-sm text-white transition-all hover:opacity-90"
                     style={{ background: 'linear-gradient(135deg,#1a4a8a,#2a6abf)' }}>
                     ⬆️ Upgrade Plan →

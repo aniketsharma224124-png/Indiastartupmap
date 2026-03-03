@@ -234,9 +234,22 @@ function UserMenu({ user, profile }) {
               </div>
             </div>
             <div className="p-2">
+              {/* Role toggle */}
+              <div className="flex items-center gap-1 mb-1 px-1">
+                <button onClick={() => { localStorage.setItem('navbarRole', 'founder'); navigate('/dashboard/founder'); setOpen(false) }}
+                  className="flex-1 py-1.5 rounded-lg text-[10px] font-black text-center transition-all"
+                  style={role === 'founder' ? { background: 'rgba(74,158,255,0.15)', color: '#4A9EFF', border: '1px solid rgba(74,158,255,0.3)' } : { background: 'transparent', color: 'rgba(255,255,255,0.3)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                  🚀 Founder
+                </button>
+                <button onClick={() => { localStorage.setItem('navbarRole', 'investor'); navigate('/dashboard/investor'); setOpen(false) }}
+                  className="flex-1 py-1.5 rounded-lg text-[10px] font-black text-center transition-all"
+                  style={role === 'investor' ? { background: 'rgba(155,111,255,0.15)', color: '#9B6FFF', border: '1px solid rgba(155,111,255,0.3)' } : { background: 'transparent', color: 'rgba(255,255,255,0.3)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                  💰 Investor
+                </button>
+              </div>
               <button onClick={() => { navigate(role === 'investor' ? '/dashboard/investor' : '/dashboard/founder'); setOpen(false) }}
                 className="w-full text-left px-3 py-2.5 rounded-lg text-xs font-bold text-white/60 hover:text-white hover:bg-white/[0.05] transition-all">
-                📊 {role === 'investor' ? 'Investor Dashboard' : 'Founder Dashboard'}
+                📊 {role === 'investor' ? 'Investor' : 'Founder'} Dashboard
               </button>
               <button onClick={handleSignOut}
                 className="w-full text-left px-3 py-2.5 rounded-lg text-xs font-bold text-red-400/70 hover:text-red-400 hover:bg-red-500/[0.08] transition-all">

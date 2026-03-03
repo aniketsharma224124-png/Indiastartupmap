@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { INDIAN_STATES } from '../data/states'
 import { getInvestorCountByState, getInvestors } from '../lib/investorDb'
 import { INVESTORS_BY_STATE } from '../data/investors'
@@ -55,6 +56,7 @@ const CLUSTER_OFFSETS = {
 export default function InvestorMapSVG({ onStateSelect, selectedStateId }) {
   const svgRef = useRef(null)
   const rafRef = useRef(null)
+  const navigate = useNavigate()
 
   const [hovered, setHovered] = useState(null)
   const [counts, setCounts] = useState({})
@@ -407,7 +409,7 @@ export default function InvestorMapSVG({ onStateSelect, selectedStateId }) {
                 style={{ cursor: 'pointer' }}
                 onClick={e => {
                   e.stopPropagation()
-                  if (!dragging.current) onStateSelect?.(state)
+                  if (!dragging.current) navigate(`/investor/${inv.id}`)
                 }}
                 onMouseEnter={e => {
                   const rect = e.currentTarget.closest('svg').getBoundingClientRect()
@@ -559,7 +561,7 @@ export default function InvestorMapSVG({ onStateSelect, selectedStateId }) {
                 textAnchor="middle" fontSize={7.5 * s}
                 fill="rgba(232,234,240,0.4)" fontFamily="DM Sans,sans-serif"
               >
-                Click to explore →
+                Click to visit ↗
               </text>
             </g>
           )
