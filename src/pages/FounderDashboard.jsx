@@ -149,7 +149,7 @@ const getPlanExpiry = startup => {
 }
 const fmt = d => d ? (d instanceof Date ? d : new Date(d)).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '—'
 const isExpired = d => d && d < new Date()
-const isExpiring = d => d && !isExpired(d) && (d - new Date()) < 30 * 86400000
+const isExpiring = d => d && !isExpired(d) && (d - new Date()) < 2 * 86400000
 
 function StatusBadge({ status }) {
   const map = { accepted: 'bg-green-500/15 border-green-500/30 text-green-400', pending: 'bg-yellow-500/10 border-yellow-500/25 text-yellow-400', declined: 'bg-red-500/10 border-red-500/25 text-red-400' }

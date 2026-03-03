@@ -13,8 +13,8 @@ import { collection, addDoc } from 'firebase/firestore'
 
 const AD_PLAN = {
   name: 'Homepage Ad Slot',
-  price: 49900,          // ₹499 in paise
-  displayPrice: '₹499',
+  price: 79900,          // ₹799 in paise
+  displayPrice: '₹799',
   period: '/month',
   features: [
     'Your logo + company name in the side ad panel',
@@ -31,7 +31,7 @@ function loadRazorpay() {
     if (window.Razorpay) return resolve(true)
     const s = document.createElement('script')
     s.src = 'https://checkout.razorpay.com/v1/checkout.js'
-    s.onload  = () => resolve(true)
+    s.onload = () => resolve(true)
     s.onerror = () => resolve(false)
     document.body.appendChild(s)
   })
@@ -41,12 +41,12 @@ export default function AdPlanPage() {
   const { user } = useAuth()
   const navigate = useNavigate()
 
-  const [email,    setEmail]    = useState(user?.email || '')
-  const [startup,  setStartup]  = useState(null)   // fetched startup profile
+  const [email, setEmail] = useState(user?.email || '')
+  const [startup, setStartup] = useState(null)   // fetched startup profile
   const [checking, setChecking] = useState(false)
   const [verified, setVerified] = useState(false)
-  const [paying,   setPaying]   = useState(false)
-  const [done,     setDone]     = useState(false)
+  const [paying, setPaying] = useState(false)
+  const [done, setDone] = useState(false)
 
   // Step 1 — verify email is tied to a listed startup
   const handleVerify = async () => {
@@ -102,29 +102,29 @@ export default function AdPlanPage() {
       image: startup.logo_url || 'https://indiastartupmap.com/logo.png',
       prefill: { name: startup.company_name, email },
       notes: {
-        startup_id:   startup.id,
+        startup_id: startup.id,
         company_name: startup.company_name,
-        type:         'ad_slot',
-        plan:         'monthly_499',
+        type: 'ad_slot',
+        plan: 'monthly_799',
       },
       theme: { color: '#3B7DD8' },
       handler: async (response) => {
         try {
           // Save ad purchase to Firestore
           await addDoc(collection(db, 'ad_purchases'), {
-            startup_id:    startup.id,
-            company_name:  startup.company_name,
-            logo_url:      startup.logo_url || '',
-            website_url:   startup.website_url || '',
-            brand_color:   startup.brand_color || '#3B7DD8',
-            tagline:       startup.description?.slice(0, 80) || '',
-            email:         email.trim().toLowerCase(),
-            payment_id:    response.razorpay_payment_id,
-            plan:          'monthly_499',
-            amount:        499,
-            status:        'active',
-            purchased_at:  new Date().toISOString(),
-            expires_at:    new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+            startup_id: startup.id,
+            company_name: startup.company_name,
+            logo_url: startup.logo_url || '',
+            website_url: startup.website_url || '',
+            brand_color: startup.brand_color || '#3B7DD8',
+            tagline: startup.description?.slice(0, 80) || '',
+            email: email.trim().toLowerCase(),
+            payment_id: response.razorpay_payment_id,
+            plan: 'monthly_799',
+            amount: 799,
+            status: 'active',
+            purchased_at: new Date().toISOString(),
+            expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
           })
           setDone(true)
           toast.success('🎉 Ad slot activated! Your startup will appear in the side panels.')
@@ -259,7 +259,7 @@ export default function AdPlanPage() {
                     <div className="text-[10px] text-white/30 uppercase tracking-wider mb-3">Order Summary</div>
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-sm text-white/60">Homepage Ad Slot</span>
-                      <span className="text-sm font-bold text-white">₹499</span>
+                      <span className="text-sm font-bold text-white">₹799</span>
                     </div>
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-sm text-white/60">Duration</span>
@@ -272,7 +272,7 @@ export default function AdPlanPage() {
                     <div className="h-px bg-white/[0.06] my-3" />
                     <div className="flex justify-between items-center">
                       <span className="font-bold text-white">Total</span>
-                      <span className="text-2xl font-black text-blue-400" style={{ fontFamily: 'Playfair Display,serif' }}>₹499</span>
+                      <span className="text-2xl font-black text-blue-400" style={{ fontFamily: 'Playfair Display,serif' }}>₹799</span>
                     </div>
                   </div>
 
@@ -281,7 +281,7 @@ export default function AdPlanPage() {
                     style={{ background: paying ? 'rgba(74,158,255,0.3)' : 'linear-gradient(135deg,#1a4a8a,#2a6abf)', opacity: paying ? 0.7 : 1 }}>
                     {paying
                       ? <><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />Processing…</>
-                      : '🚀 Pay ₹499 & Activate Ad Slot →'}
+                      : '🚀 Pay ₹799 & Activate Ad Slot →'}
                   </button>
 
                   <div className="flex items-center justify-center gap-2">
@@ -334,7 +334,7 @@ export default function AdPlanPage() {
             {/* Pricing */}
             <div className="card p-5" style={{ borderColor: 'rgba(74,158,255,0.25)' }}>
               <div className="text-center">
-                <div className="text-3xl font-black text-blue-400 mb-1" style={{ fontFamily: 'Playfair Display,serif' }}>₹499</div>
+                <div className="text-3xl font-black text-blue-400 mb-1" style={{ fontFamily: 'Playfair Display,serif' }}>₹799</div>
                 <div className="text-xs text-white/30">per month · cancel anytime</div>
               </div>
             </div>

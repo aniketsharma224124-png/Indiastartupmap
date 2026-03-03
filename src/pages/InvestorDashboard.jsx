@@ -28,7 +28,7 @@ const getPlanExpiry = (inv) => {
 
 const fmt = (d) => d ? d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '—'
 const isExpired = (d) => d && d < new Date()
-const isExpiring = (d) => d && !isExpired(d) && (d - new Date()) < 30 * 86400000
+const isExpiring = (d) => d && !isExpired(d) && (d - new Date()) < 2 * 86400000
 
 export default function InvestorDashboard() {
   const navigate = useNavigate()
