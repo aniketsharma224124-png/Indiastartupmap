@@ -351,9 +351,11 @@ function StatePanel({ stateId, stateName, startupCounts, investorCounts, onClose
                 style={{ background: 'rgba(255,255,255,0.025)', border: `1px solid ${inv.open_to_pitches ? 'rgba(0,208,156,0.15)' : 'rgba(255,255,255,0.07)'}` }}>
                 <div className="flex gap-3 items-start mb-3">
                   <Link to={`/investor/${inv.id}`}
-                    className="w-12 h-12 rounded-xl flex-shrink-0 flex items-center justify-center text-white font-black text-lg hover:opacity-80 transition-opacity"
+                    className="w-12 h-12 rounded-xl flex-shrink-0 flex items-center justify-center text-white font-black text-lg hover:opacity-80 transition-opacity overflow-hidden"
                     style={{ background: inv.brand_color || '#9B6FFF', fontFamily: 'Playfair Display,serif' }}>
-                    {inv.avatar || inv.firm_name?.[0]}
+                    {inv.logo_url
+                      ? <img src={inv.logo_url} alt={inv.firm_name} className="w-full h-full object-cover rounded-xl" />
+                      : (inv.avatar || inv.firm_name?.[0])}
                   </Link>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap mb-1">
