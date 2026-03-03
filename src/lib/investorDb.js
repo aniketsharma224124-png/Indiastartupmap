@@ -238,29 +238,35 @@ export async function isStartupSaved(investorUid, startupId) {
 }
 
 // ── INVESTOR INTEREST ─────────────────────────────────────────────────────────
-// Investor marks interest → writes to investor_interest.
-// Founder reads from inbox via getInterestNotificationsForStartup().
+// Stores interest marks in `intro_requests` with direction='investor_interest'.
+// This uses the same collection as intro requests, which has proven read/write
+// access (Firestore rules: allow read/create: if request.auth != null).
 
 export async function markInvestorInterest(investorUid, investorFirm, partnerName, startup) {
   console.log('[markInvestorInterest] called:', { investorUid, startupId: startup.id, firm: investorFirm })
   try {
-    // Single-field query + client-side filter to avoid composite index
+    // Dedup: check if already marked (single-field query + client-side filter)
     const snap = await getDocs(query(
-      collection(db, 'investor_interest'),
+      collection(db, 'intro_requests'),
       where('investor_uid', '==', investorUid),
     ))
-    const existing = snap.docs.find(d => d.data().startup_id === startup.id)
+    const existing = snap.docs.find(d => {
+      const data = d.data()
+      return data.startup_id === startup.id && data.direction === 'investor_interest'
+    })
     if (existing) {
       console.log('[markInvestorInterest] already exists')
       return { already: true }
     }
 
-    const docData = {
+    const ref = await addDoc(collection(db, 'intro_requests'), {
+      direction: 'investor_interest',
       investor_uid: investorUid,
+      investor_id: investorUid,
       investor_firm: investorFirm,
       partner_name: partnerName,
       startup_id: startup.id,
-      startup_name: startup.company_name,
+      startup_name: startup.company_name || '',
       startup_logo: startup.logo_url || '',
       brand_color: startup.brand_color || '#9B6FFF',
       founder_email: startup.founder_email || startup.email || '',
@@ -269,9 +275,9 @@ export async function markInvestorInterest(investorUid, investorFirm, partnerNam
       state: startup.state || '',
       website_url: startup.website_url || '',
       description: startup.description || '',
+      status: 'interested',
       created_at: new Date().toISOString(),
-    }
-    const ref = await addDoc(collection(db, 'investor_interest'), docData)
+    })
     console.log('[markInvestorInterest] SUCCESS! Doc ID:', ref.id)
     return { success: true }
   } catch (e) {
@@ -283,11 +289,12 @@ export async function markInvestorInterest(investorUid, investorFirm, partnerNam
 export async function getMarkedInterestByInvestor(investorUid) {
   try {
     const snap = await getDocs(query(
-      collection(db, 'investor_interest'),
+      collection(db, 'intro_requests'),
       where('investor_uid', '==', investorUid),
     ))
     return snap.docs
       .map(d => ({ id: d.id, ...d.data() }))
+      .filter(d => d.direction === 'investor_interest')
       .sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0))
   } catch (e) {
     console.error('[getMarkedInterestByInvestor]', e.code, e.message)
@@ -302,33 +309,30 @@ export async function getInterestNotificationsForStartup(startupId, startupUid =
 
     // 1. Query by startup_id
     const snap = await getDocs(query(
-      collection(db, 'investor_interest'),
+      collection(db, 'intro_requests'),
       where('startup_id', '==', startupId),
     ))
-    snap.docs.forEach(d => results.set(d.id, { id: d.id, ...d.data(), type: 'interest' }))
-    console.log('[getInterestNotificationsForStartup] by startup_id:', snap.docs.length)
+    snap.docs.forEach(d => {
+      const data = d.data()
+      if (data.direction === 'investor_interest') {
+        results.set(d.id, { id: d.id, ...data, type: 'interest' })
+      }
+    })
+    console.log('[getInterestNotificationsForStartup] by startup_id:', results.size)
 
-    // 2. Fallback: query by startup_uid
-    if (startupUid) {
-      try {
-        const snap2 = await getDocs(query(
-          collection(db, 'investor_interest'),
-          where('startup_uid', '==', startupUid),
-        ))
-        snap2.docs.forEach(d => results.set(d.id, { id: d.id, ...d.data(), type: 'interest' }))
-        console.log('[getInterestNotificationsForStartup] by startup_uid:', snap2.docs.length)
-      } catch { /* optional */ }
-    }
-
-    // 3. Fallback: query by founder_email
+    // 2. Fallback: query by founder_email
     if (founderEmail) {
       try {
-        const snap3 = await getDocs(query(
-          collection(db, 'investor_interest'),
+        const snap2 = await getDocs(query(
+          collection(db, 'intro_requests'),
           where('founder_email', '==', founderEmail),
         ))
-        snap3.docs.forEach(d => results.set(d.id, { id: d.id, ...d.data(), type: 'interest' }))
-        console.log('[getInterestNotificationsForStartup] by founder_email:', snap3.docs.length)
+        snap2.docs.forEach(d => {
+          const data = d.data()
+          if (data.direction === 'investor_interest') {
+            results.set(d.id, { id: d.id, ...data, type: 'interest' })
+          }
+        })
       } catch { /* optional */ }
     }
 
@@ -337,9 +341,6 @@ export async function getInterestNotificationsForStartup(startupId, startupUid =
     return arr
   } catch (e) {
     console.error('[getInterestNotificationsForStartup]', e.code, e.message)
-    if (e.code === 'permission-denied') {
-      console.warn('[getInterestNotificationsForStartup] Permission denied. Run: firebase deploy --only firestore:rules')
-    }
     return []
   }
 }

@@ -180,22 +180,7 @@ export default function FounderDashboard() {
 
 
   const loadProfileData = async (found) => {
-    console.log('[FounderDashboard] loadProfileData:', { startupId: found.id, startupUid: found.uid, founderEmail: found.founder_email || found.email, uid: user?.uid, email: user?.email })
-
-    // ── Read ALL investor_interest docs (no filter) as fallback ──
-    let allInterestDocs = []
-    try {
-      const { collection: col, getDocs: gd } = await import('firebase/firestore')
-      const { db } = await import('../lib/firebase')
-      const allSnap = await gd(col(db, 'investor_interest'))
-      allInterestDocs = allSnap.docs.map(d => ({ id: d.id, ...d.data(), type: 'interest' }))
-      console.log('[FounderDashboard] ALL investor_interest docs in Firestore:', allInterestDocs.length)
-      if (allInterestDocs.length > 0) {
-        allInterestDocs.forEach(d => console.log('[FounderDashboard] interest doc:', d.id, 'startup_id:', d.startup_id, 'firm:', d.investor_firm))
-      }
-    } catch (e) {
-      console.error('[FounderDashboard] failed to read investor_interest:', e.code || e.message)
-    }
+    console.log('[FounderDashboard] loadProfileData:', { startupId: found.id, email: user?.email })
 
     // 1. Founder-sent intros
     let reqs = await getIntroRequestsByStartup(found.id)
@@ -209,7 +194,7 @@ export default function FounderDashboard() {
       try { invInitiated = await getInvestorInitiatedIntrosForFounder(user.email) } catch { }
     }
 
-    // 3. Interest marks — filtered query
+    // 3. Interest marks (now from intro_requests with direction='investor_interest')
     let interestMarks = []
     try {
       interestMarks = await getInterestNotificationsForStartup(
@@ -218,19 +203,12 @@ export default function FounderDashboard() {
         found.founder_email || found.email || user?.email
       )
     } catch (err) { console.error('[FounderDashboard] interest marks error:', err) }
-    console.log('[FounderDashboard] filtered interestMarks:', interestMarks.length, '| unfiltered total:', allInterestDocs.length)
-
-    // ★ FALLBACK: if filtered query returned 0 but unfiltered has docs, use ALL
-    if (interestMarks.length === 0 && allInterestDocs.length > 0) {
-      console.warn('[FounderDashboard] ★ Filtered query missed docs! Using all unfiltered interest docs.')
-      interestMarks = allInterestDocs
-    }
+    console.log('[FounderDashboard] inbox:', { founderReqs: founderReqs.length, investorReqs: investorReqs.length, invInitiated: invInitiated.length, interestMarks: interestMarks.length })
 
     // Merge all inbox items
     const allInbox = [...investorReqs, ...invInitiated, ...interestMarks]
     const seen = new Set()
     const dedupedInbox = allInbox.filter(r => { if (seen.has(r.id)) return false; seen.add(r.id); return true })
-    console.log('[FounderDashboard] final investor inbox:', dedupedInbox.length)
 
     setIntros(founderReqs)
     setInvestorIntros(dedupedInbox)
