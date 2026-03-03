@@ -644,8 +644,6 @@ export default function FounderDashboard() {
                         <p className="text-xs text-white/35">via {r.partner_name} · {timeAgo(r.created_at)}</p>
                       </div>
                       <StatusBadge status={r.status} />
-                      <button onClick={async () => { try { await deleteIntroRequest(r.id); setIntros(p => p.filter(x => x.id !== r.id)); toast.success('Deleted') } catch { toast.error('Failed') } }}
-                        className="flex-shrink-0 px-2.5 py-1.5 rounded-lg text-xs font-bold border border-white/10 text-white/30 hover:text-red-400 hover:border-red-500/25 transition-all" title="Delete">🗑</button>
                     </div>
                   ))}
                 </div>
