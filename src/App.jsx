@@ -38,7 +38,7 @@ function AdPanelsPortal() {
     position: 'absolute',
     top: 160,
     zIndex: 5,
-    pointerEvents: 'none',
+    pointerEvents: 'auto',
   }
   return createPortal(
     <>
