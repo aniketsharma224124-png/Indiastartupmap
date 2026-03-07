@@ -697,7 +697,7 @@ export default function Home() {
           style={{ background: mode === 'investor' ? 'rgba(155,111,255,0.1)' : 'rgba(74,158,255,0.1)', borderColor: mode === 'investor' ? 'rgba(155,111,255,0.25)' : 'rgba(74,158,255,0.25)', color: mode === 'investor' ? '#9B6FFF' : '#4A9EFF' }}>
           India's First Dual Discovery Platform
         </div>
-        <h1 className="text-5xl md:text-6xl font-black leading-[1.08] mb-4"
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-[1.08] mb-4"
           style={{
             fontFamily: 'Playfair Display,serif',
             letterSpacing: '-2px',
@@ -713,7 +713,7 @@ export default function Home() {
           }}>
           Startups meet Investors.<br />State by State. 🇮🇳
         </h1>
-        <p className="text-base text-white/45 max-w-xl mx-auto leading-relaxed mb-6">
+        <p className="text-sm md:text-base text-white/45 max-w-xl mx-auto leading-relaxed mb-6">
           Switch between Startup Map and Investor Map. Click any state to explore, connect with VCs, and request warm introductions.
         </p>
         <div className="flex justify-center gap-8 mb-6 flex-wrap">

@@ -323,7 +323,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-50 h-16 transition-all duration-300 ${scrolled ? 'bg-[#05090F]/96 backdrop-blur-xl border-b border-white/[0.06]' : 'bg-[#05090F]/80 backdrop-blur-md'}`}>
+      <nav className={`fixed top-0 left-0 right-0 z-50 h-16 transition-all duration-300 ${scrolled ? 'bg-[#05090F]/95 backdrop-blur-xl border-b border-white/[0.06]' : 'bg-[#05090F]/80 backdrop-blur-md'}`}>
         <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
 
           {/* Logo */}
@@ -417,7 +417,7 @@ export default function Navbar() {
         </div>
 
         {mobileOpen && (
-          <div className="md:hidden bg-[#05090F]/98 backdrop-blur-xl border-t border-white/[0.06] px-6 py-5 flex flex-col gap-3">
+          <div className="md:hidden bg-[#05090F]/95 backdrop-blur-xl border-t border-white/[0.06] px-6 py-5 flex flex-col gap-3 relative">
             {tabs.map(({ label, path }) => (
               <Link key={path} to={path} className="text-sm font-bold text-white/60 hover:text-white py-1">{label}</Link>
             ))}
