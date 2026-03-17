@@ -772,7 +772,7 @@ export default function Home() {
           Switch between Startup Map and Investor Map. Click any state to explore, connect with VCs, and request warm introductions.
         </p>
         <div className="flex justify-center gap-8 mb-6 flex-wrap">
-          {[{ v: '1,200+', l: 'Startups', c: '#4A9EFF' }, { v: `${totalInvestors}+`, l: 'Investors', c: '#9B6FFF' }, { v: '29 + 7', l: 'States & UTs', c: '#00D09C' }, { v: '12K+', l: 'Intros Sent', c: '#F6C90E' }].map(({ v, l, c }) => (
+          {[{ v: '1,200+', l: 'Startups', c: '#4A9EFF' }, { v: `${totalInvestors}+`, l: 'Investors', c: '#9B6FFF' }, { v: '36', l: 'States & UTs', c: '#00D09C' }, { v: '12K+', l: 'Intros Sent', c: '#F6C90E' }].map(({ v, l, c }) => (
             <div key={l} className="text-center">
               <div className="text-2xl font-black" style={{ fontFamily: 'Playfair Display,serif', color: c }}>{v}</div>
               <div className="text-[10px] text-white/30 uppercase tracking-widest">{l}</div>
