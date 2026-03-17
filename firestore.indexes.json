@@ -1,0 +1,114 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "startups",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "status",     "order": "ASCENDING" },
+        { "fieldPath": "state",      "order": "ASCENDING" },
+        { "fieldPath": "created_at", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "startups",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "status",     "order": "ASCENDING" },
+        { "fieldPath": "is_premium", "order": "ASCENDING" },
+        { "fieldPath": "created_at", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "startups",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "uid",        "order": "ASCENDING" },
+        { "fieldPath": "created_at", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "startups",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "founder_email", "order": "ASCENDING" },
+        { "fieldPath": "created_at",    "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "investors",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "status",     "order": "ASCENDING" },
+        { "fieldPath": "state_id",   "order": "ASCENDING" },
+        { "fieldPath": "created_at", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "investors",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "uid",        "order": "ASCENDING" },
+        { "fieldPath": "created_at", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "investor_interest",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "investor_uid", "order": "ASCENDING" },
+        { "fieldPath": "startup_id",   "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "investor_interest",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "startup_id",   "order": "ASCENDING" },
+        { "fieldPath": "created_at",   "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "intro_requests",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "investor_id",    "order": "ASCENDING" },
+        { "fieldPath": "startup_id",     "order": "ASCENDING" },
+        { "fieldPath": "direction",      "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "intro_requests",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "founder_email",  "order": "ASCENDING" },
+        { "fieldPath": "direction",      "order": "ASCENDING" },
+        { "fieldPath": "created_at",     "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "intro_requests",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "startup_id",     "order": "ASCENDING" },
+        { "fieldPath": "created_at",     "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "saved_startups",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "investor_uid",   "order": "ASCENDING" },
+        { "fieldPath": "startup_id",     "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "saved_startups",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "investor_uid",   "order": "ASCENDING" },
+        { "fieldPath": "saved_at",       "order": "DESCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
