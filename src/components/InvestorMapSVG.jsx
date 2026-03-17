@@ -284,9 +284,9 @@ export default function InvestorMapSVG({ onStateSelect, selectedStateId }) {
     const count = counts[state.id] || counts[state.name] || 0
     const hasLogo = logosByState[state.id]?.length > 0
     
-    const fill = isSel ? '#4a3070' : hovered === state.id ? '#352554' : count > 0 ? '#261b3d' : '#1e1c26'
-    const stroke = isSel ? 'rgba(180,120,255,1.0)' : hovered === state.id ? 'rgba(180,120,255,0.8)' : count > 0 ? 'rgba(170,110,255,0.5)' : 'rgba(150,100,255,0.3)'
-    const sw = isSel ? 1.5 : 0.6
+    const fill = isSel ? '#6d28d9' : hovered === state.id ? '#4c1d95' : '#2d1b69'
+    const stroke = 'rgba(255, 215, 0, 0.7)'
+    const sw = 0.4
     
     const scx = stateCentroids[state.id]?.[0] ?? state.cx
     const scy = stateCentroids[state.id]?.[1] ?? state.cy
@@ -309,7 +309,7 @@ export default function InvestorMapSVG({ onStateSelect, selectedStateId }) {
       <g key={state.id} {...handlers}>
         <path d={d} fill={fill} stroke={stroke} strokeWidth={sw}
           className="india-state"
-          style={{ filter: isSel ? 'url(#inv-sglow)' : 'none', cursor: 'pointer', pointerEvents: 'all' }}
+          style={{ filter: isSel ? 'url(#inv-sglow)' : 'url(#inv-border-glow)', cursor: 'pointer', pointerEvents: 'all' }}
         />
         {!hasLogo && (
           <>
@@ -371,6 +371,12 @@ export default function InvestorMapSVG({ onStateSelect, selectedStateId }) {
           <filter id="inv-lglow" x="-80%" y="-80%" width="260%" height="260%">
             <feGaussianBlur stdDeviation="2" result="b" />
             <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+          </filter>
+          <filter id="inv-border-glow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="1.2" result="blur" />
+            <feFlood floodColor="#FFD700" floodOpacity="0.45" result="gold" />
+            <feComposite in="gold" in2="blur" operator="in" result="glow" />
+            <feMerge><feMergeNode in="glow" /><feMergeNode in="SourceGraphic" /></feMerge>
           </filter>
         </defs>
 
